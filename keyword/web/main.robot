@@ -10,9 +10,12 @@ Library         ${EXECDIR}${/}libraries/FileHandling.py
 ${TIMEOUT}    20s
 
 *** Keywords ***
-user launch ${browser_type} browser : expected title ${title}
-    open browser    ${url}    ${browser_type}
+user launch ${browser_type} browser
+    open browser   https://www.google.com     ${browser_type}
     maximize browser window
+
+wait until page loaded: page ${title}
+    go to    ${test_data["url"]}
     wait until keyword succeeds    ${TIMEOUT}    2s
     ...    page should contain    ${title}
 
