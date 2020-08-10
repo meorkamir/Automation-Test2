@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
+import requests
 from robot.libraries.BuiltIn import BuiltIn
+from selenium import webdriver
 
 class WebScrapping:
 
@@ -17,3 +19,5 @@ class WebScrapping:
             print(prd_price)
             # print(prd_link)
 
+    def web_scrapping(self, element):
+        print("AAA")

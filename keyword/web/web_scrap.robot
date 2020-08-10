@@ -1,9 +1,7 @@
 *** Settings ***
 Documentation       All keyword to get perform web scrapping
 
-Library         ${EXECDIR}/libraries/WebScrapping.py
-
-
+Library         ${EXECDIR}${/}libraries/FileHandling.py
 
 *** Keywords ***
 special handle shopee popup
@@ -11,11 +9,12 @@ special handle shopee popup
     ...    run keywords
     ...    wait until element is visible    class:shopee-button-outline--primary-reverse    ${TIMEOUT}
     ...    AND    click element    class:shopee-button-outline--primary-reverse
-    ...    AND    click element    class:shopee-popup__close-btn
+    ...    AND    wait until keyword succeeds    ${TIMEOUT}    2s     click element    class:shopee-popup__close-btn
 
 search ${item} from web
     special handle shopee popup
-    input text    ${test_data["searchBox_locator"]}    ${item}
+    wait until keyword succeeds    ${TIMEOUT}    2s
+    ...    input text    ${test_data["searchBox_locator"]}    ${item}
     click element    ${test_data["searchBtn_locator"]}
     wait until element is visible     ${test_data["resultPageWaitElement"]}    ${TIMEOUT}
 
@@ -24,13 +23,24 @@ get produt name, price and url
     ${elem_len} =    get length    ${element}
 
     @{element_prd_name} =    get webelements    ${test_data["prdName_locator"]}
+    ${elem_name_len} =    get length    ${element_prd_name}
     @{element_prd_price} =    get webelements    ${test_data["prdPrice_locator"]}
+    ${elem_prc_len} =    get length    ${element_prd_price}
     @{element_prd_url} =    get webelements    ${test_data["prdUrl_locator"]}
-    FOR    ${i}    IN RANGE    0    10
+    ${elem_url_len} =    get length    ${element_prd_url}
+
+    ${result}=    create list
+    FOR    ${i}    IN RANGE    0    ${elem_len}
         ${prd_name} =     get text    ${element_prd_name[${i}]}
-#        ${prd_price} =    get text          ${element_prd_price[${i}]}
+        ${prd_price} =    get text          ${element_prd_price[${i}]}
         ${prd_url} =     get element attribute      ${element_prd_url[${i}]}       href
-        log to console    ${prd_name}
-#        log to console    ${prd_price}
-        log to console    ${prd_url}
+
+        ${item}=    Catenate	SEPARATOR=,    	${test_data["pageTitle"]}    ${prd_name}    ${prd_price}    ${prd_url}
+        log    ${item}
+        append to list    ${result}    ${item}
     END
+
+    write file    ${test_data["pageTitle"]}    ${result}
+
+process result from raw data
+    process_raw_result

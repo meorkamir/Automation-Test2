@@ -2,12 +2,12 @@
 Documentation       Main file with reusable code to run web application
 
 Library         SeleniumLibrary
+Library         Collections
 
 Resource        ${EXECDIR}/keyword/web/web_scrap.robot
-Library         ${EXECDIR}${/}libraries/FileHandling.py
 
 *** Variables ***
-${TIMEOUT}    20s
+${TIMEOUT}    10s
 
 *** Keywords ***
 user launch ${browser_type} browser
