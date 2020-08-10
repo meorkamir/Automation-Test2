@@ -13,6 +13,7 @@ Under folder testdata
 
 ## Limitation for now:
 1) Unable to sort out the result of those 2 website by it price  (Test case number 3,incomplete)
+2) Result from shopee test case not accurate (while running script, number of detected element not as expected)
 
 ## Acknowledgement
 1) Robotframework https://robotframework.org
